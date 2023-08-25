@@ -3,6 +3,7 @@ package app
 import (
 	"L0_EVRONE/config"
 	"L0_EVRONE/internal/controller/http"
+	"L0_EVRONE/internal/controller/natsstreaming"
 	"L0_EVRONE/internal/usecase"
 	"L0_EVRONE/internal/usecase/memory"
 	"L0_EVRONE/pkg/httpserver"
@@ -30,6 +31,8 @@ func Run(cfg *config.Config) {
 	handler := gin.New()
 	v1.NewRouter(handler, l, *orderUseCase)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
+
+	natsstreaming.New(l,*orderUseCase)
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)
