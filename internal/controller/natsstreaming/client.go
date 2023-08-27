@@ -16,37 +16,54 @@ type Nats struct {
 }
 
 func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
+	var err error
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	// connect to nats server
-	nc, _ := nats.Connect(nats.DefaultURL)
-
+	nc, err := nats.Connect(nats.DefaultURL)
+	if err != nil {
+		l.Error("nats.Connect: %v", err)
+	}
 	// create jetstream context from nats connection
-	js, _ := jetstream.New(nc)
-
+	js, err := jetstream.New(nc)
+	if err != nil {
+		l.Error("jetstream.New: %v", err)
+	}
 	// Create a stream
-	s, _ := js.CreateStream(ctx, jetstream.StreamConfig{
+	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
 		Name:     "ORDERS",
 		Subjects: []string{"ORDERS.*"},
 	})
-
-	c, _ := s.CreateOrUpdateConsumer(ctx, jetstream.ConsumerConfig{
+	if err != nil {
+		l.Error("js.CreateStream: %v", err)
+	}
+	c, err := s.CreateOrUpdateConsumer(ctx, jetstream.ConsumerConfig{
 		Durable:   "CONS",
 		AckPolicy: jetstream.AckExplicitPolicy,
 	})
-
+	if err != nil {
+		l.Error("s.CreateOrUpdateConsumer: %v", err)
+	}
 	// Receive messages continuously in a callback
-	cons, _ := c.Consume(func(msg jetstream.Msg) {
+	cons, err := c.Consume(func(msg jetstream.Msg) {
 		msg.Ack()
+		err := Validation(msg.Data())
+		if err != nil {
+			l.Error("Validation: %v", err)
+		}
 		data, err := Serialization(msg.Data())
 		if err != nil {
-			l.Error("")
+			l.Error("Serialization: %v", err)
 		}
 		err = t.Set(context.Background(), data)
 		if err != nil {
-			l.Error("")
+			l.Error("Seve data: %v", err)
 		}
 		//fmt.Printf("Received a JetStream message via callback: %s\n", string(msg.Data()))
 	})
+	if err != nil {
+		l.Error("c.Consume: %v", err)
+	}
+
 
 	return &Nats{
 		cancel:   cancel,
@@ -54,29 +71,9 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 	}
 }
 
-func Close() {
+func (n *Nats) Shutdown() error {
 
+	n.consStop.Stop()
+	n.cancel()
+	return nil
 }
-
-func GetMessage() {
-
-}
-
-/*func main() {
-//	// Создаем клиента
-	client, err := nats.NewClient("nats://<your-nats-host-address>:4222")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Регистрируемся для прослушивания канала
-	_, err = client.Channel("my-channel").Subscribe(
-        func(string) {
-		// Обрабатываем сообщение
-	}
-    )
-	if err != nil {
-		log.Fatalf("Failed to subscribe: %s", err)
-	}
-}
-*/

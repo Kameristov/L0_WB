@@ -32,20 +32,20 @@ type OrderByIdResponse struct {
 	Order aggregate.Order
 }
 
-// @Summary     Show history
-// @Description Show all Order history
+// @Summary     Show OrderById
+// @Description Show Order by ID
 // @ID          history
 // @Tags  	    Order
 // @Accept      json
 // @Produce     json
-// @Success     200 {object} historyResponse
+// @Success     200 {object} orderResponse
 // @Failure     500 {object} response
-// @Router      /Order/history [get]
+// @Router      /Order/get [get]
 func (r *OrderRoutes) getOrderById(c *gin.Context) {
 
 	var request doIdRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
-		r.l.Error(err, "http - v1 - doTranslate")
+		r.l.Error(err, "http - v1 - getOrderById")
 		errorResponse(c, http.StatusBadRequest, "invalid request body")
 
 		return
@@ -53,11 +53,11 @@ func (r *OrderRoutes) getOrderById(c *gin.Context) {
 
 	Orders, err := r.t.Get(c.Request.Context(),request.Id)
 	if err != nil {
-		r.l.Error(err, "http - v1 - history")
+		r.l.Error(err, "http - v1 - Get")
 		errorResponse(c, http.StatusInternalServerError, "database problems")
 
 		return
 	}
 
-	c.JSON(http.StatusOK, OrderByIdResponse{Orders})
+	c.JSON(http.StatusOK, Orders)
 }

@@ -18,21 +18,19 @@ import (
 
 func Run(cfg *config.Config) {
 	var err error
-	
-	l := logger.New(cfg.Log.Level)
 
+	l := logger.New(cfg.Log.Level)
 
 	mem := memory.New()
 
 	// Use case
 	orderUseCase := usecase.New(mem)
 
-
 	handler := gin.New()
 	v1.NewRouter(handler, l, *orderUseCase)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
 
-	natsstreaming.New(l,*orderUseCase)
+	nats := natsstreaming.New(l, *orderUseCase)
 
 	// Waiting signal
 	interrupt := make(chan os.Signal, 1)
@@ -49,5 +47,10 @@ func Run(cfg *config.Config) {
 	err = httpServer.Shutdown()
 	if err != nil {
 		l.Error(fmt.Errorf("app - Run - httpServer.Shutdown: %w", err))
+	}
+
+	err = nats.Shutdown()
+	if err != nil {
+		l.Error(fmt.Errorf("app - Run - nats.Shutdown: %w", err))
 	}
 }
