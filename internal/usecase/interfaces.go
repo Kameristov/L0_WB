@@ -22,3 +22,9 @@ type OrderRepository interface {
 	PutRep(aggregate.Order) error
 	GetRep(string) (aggregate.Order, error)
 }
+
+type OrderPostgresRepository interface {
+	PutPgRep(aggregate.Order) error
+	GetPgRep(string) (aggregate.Order, error)
+	GetPgAllRep() ([]aggregate.Order, error)
+}

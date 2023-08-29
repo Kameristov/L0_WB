@@ -1,5 +1,5 @@
 app:
-  name: 'go-clean-template'
+  name: 'L0_Order'
   version: '1.0.0'
 
 http:
@@ -11,6 +11,8 @@ logger:
 
 postgres:
   pool_max: 2
+  url: 'postgres://postgres:postgres@localhost:5432/postgres?pool_max_conns=10'
+
 
 rabbitmq:
   rpc_server_exchange: 'rpc_server'

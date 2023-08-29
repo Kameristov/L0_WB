@@ -6,8 +6,10 @@ import (
 	"L0_EVRONE/internal/controller/natsstreaming"
 	"L0_EVRONE/internal/usecase"
 	"L0_EVRONE/internal/usecase/memory"
+	"L0_EVRONE/internal/usecase/postgresdb"
 	"L0_EVRONE/pkg/httpserver"
 	"L0_EVRONE/pkg/logger"
+	"L0_EVRONE/pkg/postgres"
 	"fmt"
 	"os"
 	"os/signal"
@@ -21,15 +23,24 @@ func Run(cfg *config.Config) {
 
 	l := logger.New(cfg.Log.Level)
 
-	mem := memory.New()
+	pg, err := postgres.New(cfg.PG.URL, postgres.MaxPoolSize(cfg.PG.PoolMax))
+	if err != nil {
+		l.Fatal(fmt.Errorf("app - Run - postgres.New: %w", err))
+	}
+	defer pg.Close()
+	pgdb := postgresdb.New(pg)
+
+	mem := memory.New(pgdb)
 
 	// Use case
 	orderUseCase := usecase.New(mem)
 
+	// HTTP
 	handler := gin.New()
 	v1.NewRouter(handler, l, *orderUseCase)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
 
+	// Nats-streaming
 	nats := natsstreaming.New(l, *orderUseCase)
 
 	// Waiting signal

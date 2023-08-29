@@ -3,19 +3,36 @@ package memory
 import (
 	"L0_EVRONE/internal/aggregate"
 	"L0_EVRONE/internal/usecase"
+	"L0_EVRONE/internal/usecase/postgresdb"
 	"fmt"
 	"sync"
 )
 
 type MemoryRepository struct {
 	orders map[string]aggregate.Order
+	db     *postgresdb.OrderRepo
 	sync.Mutex
 }
 
-func New() *MemoryRepository {
-	return &MemoryRepository{
+func New(db *postgresdb.OrderRepo) *MemoryRepository {
+	memRep := MemoryRepository{
 		orders: make(map[string]aggregate.Order),
+		db:     db,
 	}
+
+	ordersArray, err := memRep.db.GetPgAllRepos()
+	if err != nil {
+		fmt.Printf("Error get all data from DB\n")
+		return &memRep
+	}
+	
+	for _, order := range ordersArray {
+		memRep.Lock()
+		memRep.orders[order.GetOrderID()] = order
+		memRep.Unlock()
+		fmt.Printf("Add Order to memory ID:%s\n",order.GetOrderID())
+	}
+	return &memRep
 }
 
 func (r *MemoryRepository) GetRep(orderId string) (aggregate.Order, error) {
@@ -36,5 +53,12 @@ func (r *MemoryRepository) PutRep(o aggregate.Order) error {
 	r.Lock()
 	r.orders[o.GetOrderID()] = o
 	r.Unlock()
+
+	fmt.Printf("Save data to memory Id: %s\n", o.GetOrderID())
+	err := r.db.PutPgRep(o)
+	if err != nil {
+		fmt.Printf("Error save data to Postgres err: %v\n", err)
+	}
+	fmt.Printf("Save data to Postgres\n")
 	return nil
 }

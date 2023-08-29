@@ -49,14 +49,17 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 		err := Validation(msg.Data())
 		if err != nil {
 			l.Error("Validation: %v", err)
+			return
 		}
 		data, err := Serialization(msg.Data())
 		if err != nil {
 			l.Error("Serialization: %v", err)
+			return
 		}
 		err = t.Set(context.Background(), data)
 		if err != nil {
 			l.Error("Seve data: %v", err)
+			return
 		}
 		//fmt.Printf("Received a JetStream message via callback: %s\n", string(msg.Data()))
 	})
