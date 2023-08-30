@@ -1,5 +1,5 @@
-// Package v1 implements routing paths. Each services in own file.
-package v1
+// Package http implements routing paths. Each services in own file.
+package http
 
 import (
 	"L0_EVRONE/internal/usecase"
@@ -14,8 +14,11 @@ func NewRouter(handler *gin.Engine, l logger.Interface, t usecase.OrderUseCase) 
 	handler.Use(gin.Recovery())
 
 	// Routers
-	h := handler.Group("/v1")
+	h := handler.Group("/api")
 	{
 		newOrderRoutes(h, t, l)
 	}
+
+	newWeb(handler, t, l)
+
 }

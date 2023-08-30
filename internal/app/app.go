@@ -37,7 +37,7 @@ func Run(cfg *config.Config) {
 
 	// HTTP
 	handler := gin.New()
-	v1.NewRouter(handler, l, *orderUseCase)
+	http.NewRouter(handler, l, *orderUseCase)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// Nats-streaming
