@@ -56,7 +56,7 @@ func (r *MemoryRepository) PutRep(o aggregate.Order) error {
 	fmt.Printf("Save data to memory Id: %s\n", o.GetOrderID())
 	err := r.db.PutPgRep(o)
 	if err != nil {
-		fmt.Printf("Error save data to Postgres err: %v\n", err)
+		return fmt.Errorf("Error save data to Postgres err: %w", err)
 	}
 	fmt.Printf("Save data to Postgres\n")
 	return nil

@@ -13,7 +13,7 @@ var (
 )
 
 type OrderNats interface {
-	Set(context.Context, aggregate.Order) (aggregate.Order, error)
+	Set(context.Context, aggregate.Order)  error
 }
 type OrderApi interface {
 	Get(context.Context, string) (aggregate.Order, error)

@@ -56,6 +56,7 @@ var jsonString1 = []byte(`{
   }`)
 
 func TestSerialization(t *testing.T) {
+	t.Parallel()
 	in := []byte(jsonString1)
 
 	want, err := aggregate.NewOrder(in)
@@ -78,6 +79,7 @@ func TestSerialization(t *testing.T) {
 }
 
 func TestValidation(t *testing.T) {
+	t.Parallel()
 	in := []byte(jsonString1)
 
 	var wanterr error = nil
