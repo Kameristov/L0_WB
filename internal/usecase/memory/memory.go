@@ -30,7 +30,6 @@ func New(db *postgresdb.OrderRepo) *MemoryRepository {
 		memRep.Lock()
 		memRep.orders[order.GetOrderID()] = order
 		memRep.Unlock()
-		fmt.Printf("Add Order to memory ID:%s\n",order.GetOrderID())
 	}
 	return &memRep
 }

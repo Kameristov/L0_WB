@@ -195,7 +195,7 @@ func (db *OrderRepo) GetPgAllRepos() ([]aggregate.Order, error) {
 	}
 	rows.Close()
 
-	fmt.Printf("oirderIdList : %v \n", oirderIdList)
+	fmt.Printf("DB oirderIdList : %v \n", oirderIdList)
 	for _, orderId := range oirderIdList {
 		object, err := db.GetPgRep(orderId)
 		if err != nil {
@@ -205,6 +205,5 @@ func (db *OrderRepo) GetPgAllRepos() ([]aggregate.Order, error) {
 		orders = append(orders, object)
 	}
 
-	fmt.Printf("orders : %v \n", orders)
 	return orders, nil
 }

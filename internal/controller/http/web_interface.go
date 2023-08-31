@@ -85,7 +85,7 @@ func structToString(st aggregate.Order) string {
 	//
 	resultString = fmt.Sprintf("%s \n\n Items:", resultString)
 	for num, it := range st.Items {
-		resultString = fmt.Sprintf("%s \n Item № %d", resultString, num+1)
+		resultString = fmt.Sprintf("%s \n\n Item № %d", resultString, num+1)
 		resultString = fmt.Sprintf("%s \n ChrtId: %+v", resultString, it.ChrtId)
 		resultString = fmt.Sprintf("%s \n TrackNumber: %+v", resultString, it.TrackNumber)
 		resultString = fmt.Sprintf("%s \n Price: %+v", resultString, it.Price)
