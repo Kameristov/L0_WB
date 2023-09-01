@@ -22,11 +22,13 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
 		l.Error("nats.Connect: %v", err)
+		return &Nats{cancel: cancel, consStop: nil}
 	}
 	// create jetstream context from nats connection
 	js, err := jetstream.New(nc)
 	if err != nil {
 		l.Error("jetstream.New: %v", err)
+		return &Nats{cancel: cancel, consStop: nil}
 	}
 	// Create a stream
 	s, err := js.CreateStream(ctx, jetstream.StreamConfig{
@@ -35,6 +37,7 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 	})
 	if err != nil {
 		l.Error("js.CreateStream: %v", err)
+		return &Nats{cancel: cancel, consStop: nil}
 	}
 	c, err := s.CreateOrUpdateConsumer(ctx, jetstream.ConsumerConfig{
 		Durable:   "CONS",
@@ -42,6 +45,7 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 	})
 	if err != nil {
 		l.Error("s.CreateOrUpdateConsumer: %v", err)
+		return &Nats{cancel: cancel, consStop: nil}
 	}
 	// Receive messages continuously in a callback
 	cons, err := c.Consume(func(msg jetstream.Msg) {
@@ -65,8 +69,8 @@ func New(l logger.Interface, t usecase.OrderUseCase) *Nats {
 	})
 	if err != nil {
 		l.Error("c.Consume: %v", err)
+		return &Nats{cancel: cancel, consStop: nil}
 	}
-
 
 	return &Nats{
 		cancel:   cancel,
