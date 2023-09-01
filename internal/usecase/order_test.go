@@ -89,7 +89,8 @@ func TestGet(t *testing.T) {
 			res, err := order.Get(context.Background(), tc.input)
 
 			require.Equal(t, res, tc.res)
-			require.ErrorIs(t, err, tc.err)
+			//require.ErrorIs(t, err, tc.err)
+			require.ErrorAs(t, err, tc.err)
 		})
 	}
 }
