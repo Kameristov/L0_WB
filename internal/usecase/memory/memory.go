@@ -1,9 +1,9 @@
 package memory
 
 import (
-	"L0_EVRONE/internal/aggregate"
-	"L0_EVRONE/internal/usecase"
-	"L0_EVRONE/internal/usecase/postgresdb"
+	"L0_WB/internal/aggregate"
+	"L0_WB/internal/usecase"
+	"L0_WB/internal/usecase/postgresdb"
 	"fmt"
 	"sync"
 )

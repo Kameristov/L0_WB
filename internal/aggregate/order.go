@@ -1,7 +1,7 @@
 package aggregate
 
 import (
-	"L0_EVRONE/internal/entity"
+	"L0_WB/internal/entity"
 	"encoding/json"
 )
 

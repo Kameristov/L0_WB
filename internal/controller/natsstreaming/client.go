@@ -1,8 +1,8 @@
 package natsstreaming
 
 import (
-	"L0_EVRONE/internal/usecase"
-	"L0_EVRONE/pkg/logger"
+	"L0_WB/internal/usecase"
+	"L0_WB/pkg/logger"
 	"context"
 	"time"
 

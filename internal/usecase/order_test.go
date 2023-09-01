@@ -1,8 +1,8 @@
 package usecase_test
 
 import (
-	"L0_EVRONE/internal/aggregate"
-	"L0_EVRONE/internal/usecase"
+	"L0_WB/internal/aggregate"
+	"L0_WB/internal/usecase"
 	"context"
 	"testing"
 

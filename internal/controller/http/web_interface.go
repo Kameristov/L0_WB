@@ -1,9 +1,9 @@
 package http
 
 import (
-	"L0_EVRONE/internal/aggregate"
-	"L0_EVRONE/internal/usecase"
-	"L0_EVRONE/pkg/logger"
+	"L0_WB/internal/aggregate"
+	"L0_WB/internal/usecase"
+	"L0_WB/pkg/logger"
 	"fmt"
 	"net/http"
 

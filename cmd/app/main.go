@@ -1,8 +1,8 @@
 package main
 
 import (
-	"L0_EVRONE/config"
-	"L0_EVRONE/internal/app"
+	"L0_WB/config"
+	"L0_WB/internal/app"
 	"log"
 )
 

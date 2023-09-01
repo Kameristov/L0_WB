@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"L0_EVRONE/internal/aggregate"
+	"L0_WB/internal/aggregate"
 	"context"
 	"errors"
 )

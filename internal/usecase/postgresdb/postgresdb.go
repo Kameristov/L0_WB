@@ -1,9 +1,9 @@
 package postgresdb
 
 import (
-	"L0_EVRONE/internal/aggregate"
-	"L0_EVRONE/internal/entity"
-	"L0_EVRONE/pkg/postgres"
+	"L0_WB/internal/aggregate"
+	"L0_WB/internal/entity"
+	"L0_WB/pkg/postgres"
 	"context"
 	"fmt"
 

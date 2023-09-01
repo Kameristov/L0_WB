@@ -1,4 +1,4 @@
-module L0_EVRONE
+module L0_WB
 
 go 1.21.0
 

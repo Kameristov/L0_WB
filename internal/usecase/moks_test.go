@@ -5,7 +5,7 @@
 package usecase_test
 
 import (
-	aggregate "L0_EVRONE/internal/aggregate"
+	aggregate "L0_WB/internal/aggregate"
 	context "context"
 	reflect "reflect"
 

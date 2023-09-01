@@ -1,7 +1,7 @@
 package natsstreaming
 
 import (
-	"L0_EVRONE/internal/aggregate"
+	"L0_WB/internal/aggregate"
 	"fmt"
 
 	"github.com/xeipuuv/gojsonschema"

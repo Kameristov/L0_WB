@@ -2,8 +2,8 @@
 package http
 
 import (
-	"L0_EVRONE/internal/usecase"
-	"L0_EVRONE/pkg/logger"
+	"L0_WB/internal/usecase"
+	"L0_WB/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 )
