@@ -36,7 +36,7 @@ func TestSet(t *testing.T) {
 
 	tests := []test{
 		{
-			name: "empty result",
+			name: "Set-empty result",
 			mock: func() {
 				repo.EXPECT().PutRep(aggregate.Order{ Order_uid: "123456789"}).Return(nil)
 			},
@@ -66,7 +66,7 @@ func TestGet(t *testing.T) {
 
 	tests := []test{
 		{
-			name: "empty result",
+			name: "Get-empty result",
 			mock: func() {
 				repo.EXPECT().GetRep("123456789").Return(aggregate.Order{
 					Order_uid: "123456789",
@@ -89,8 +89,7 @@ func TestGet(t *testing.T) {
 			res, err := order.Get(context.Background(), tc.input)
 
 			require.Equal(t, res, tc.res)
-			//require.ErrorIs(t, err, tc.err)
-			require.ErrorAs(t, err, tc.err)
+			require.ErrorIs(t, err, tc.err)
 		})
 	}
 }
